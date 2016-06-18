@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Demo - canvas maze</title>
+</head>
+
+<body>
+<canvas id="maze" width="300" height="300" style="border:1px dotted; float:left"></canvas>
+<p>
+<a href="#" onclick="restart_game();return false">Click to restart the game</a>
+</p>
+<p>
+<div class="move_content">Moves: <span class='value'>0</span></div>
+</p>
+<p>
+<div class="message"><span class='value'></span></div>
+</p>
+
+
+
+
+<script>
+var maze_canvas = document.getElementById("maze");
+var maze_context = maze_canvas.getContext("2d");
+var maze_map = [[0, 0, 0, 0, 0, 0, 0],
+                [0, 1, 1, 1, 0, 1, 0],
+                [0, 1, 0, 0, 0, 1, 0],
+                [0, 1, 1, 1, 1, 1, 0],
+                [0, 1, 0, 1, 0, 0, 0],
+                [0, 1, 0, 1, 1, 1, 0],
+                [0, 0, 0, 0, 0, 0, 0]];
+var cur_pos = [5, 1];
+var move_count = 0;
+var $move_value = document.querySelector('.move_content .value');
+var $message = document.querySelector('.message .value');
+reset_and_draw();
+
+function reset_and_draw() {
+  maze_canvas.width = maze_canvas.width;
+  draw_maze();
+  draw_cur_pos();
+}
+
+function draw_maze() {
+  // draw grids
+  maze_context.strokeStyle = "#aaa";
+  maze_context.lineWidth = 1;
+  maze_context.beginPath();
+  // vertical lines
+  for (var x = 59.5; x <= 240; x += 60) {
+    maze_context.moveTo(x, 0);
+    maze_context.lineTo(x, 300);
+  }
+  // horizontal lines
+  for (var y = 59.5; y <= 240; y += 60) {
+    maze_context.moveTo(0, y);
+    maze_context.lineTo(300, y);
+  }
+  maze_context.stroke();
+
+  // draw walls
+  maze_context.fillStyle = "#000";
+  maze_context.fillRect(60, 60, 120, 60);
+  maze_context.fillRect(180, 0, 60, 120);
+  maze_context.fillRect(60, 180, 60, 120);
+  maze_context.fillRect(180, 180, 120, 60);
+
+  // draw goal
+  // draw flag
+  maze_context.beginPath();
+  maze_context.moveTo(260, 15);
+  maze_context.lineTo(280, 30);
+  maze_context.lineTo(260, 30);
+  maze_context.lineTo(260, 15);
+  maze_context.fillStyle = "red";
+  maze_context.fill();
+  // draw pole
+  maze_context.beginPath();
+  maze_context.moveTo(259, 15);
+  maze_context.lineTo(259, 45);
+  maze_context.strokeStyle = "#000";
+  maze_context.lineWidth = 2;
+  maze_context.stroke();
+}
+function draw_cur_pos() {
+  var x = (cur_pos[1]-1)*60 + 30;
+  var y = (cur_pos[0]-1)*60 + 30;
+  var radius = 20;
+  maze_context.beginPath();
+  maze_context.arc(x, y, radius, 0, Math.PI * 2, false);
+  maze_context.closePath();
+  maze_context.fillStyle = "#00f";
+  maze_context.fill();
+}
+function restart_game() {
+  move_count = 0;
+  $move_value.innerHTML = move_count;
+  cur_pos = [5, 1];
+  maze_canvas.width = maze_canvas.width;
+  reset_and_draw();
+  $message.innerHTML = "";
+}
+
+function draw_smile_face() {
+  var x = (cur_pos[1]-1)*60 + 30;
+  var y = (cur_pos[0]-1)*60 + 30;
+  var radius = 20;
+
+  // face
+  maze_context.beginPath();
+  maze_context.arc(x, y, radius-1, 0, Math.PI * 2, false);
+  maze_context.closePath();
+  maze_context.fillStyle = "yellow";
+  maze_context.fill();
+
+  // left eye
+  maze_context.beginPath();
+  maze_context.arc(x-radius/2, y-radius/3, 2, 0, Math.PI * 2, false);
+  maze_context.closePath();
+  maze_context.fillStyle = "#000";
+  maze_context.fill();
+
+  // right eye
+  maze_context.beginPath();
+  maze_context.arc(x+radius/2, y-radius/3, 2, 0, Math.PI * 2, false);
+  maze_context.closePath();
+  maze_context.fillStyle = "#000";
+  maze_context.fill();
+
+  // mouth
+  maze_context.beginPath();
+  maze_context.arc(x, y, radius*2/3, 0, Math.PI, false);
+  maze_context.closePath();
+  maze_context.fillStyle = "#f9b";
+  maze_context.fill();
+  maze_context.strokeStyle = "#000";
+  maze_context.stroke();
+
+  // teeth
+  maze_context.fillStyle = "#fff";
+  maze_context.fillRect(x-radius/4, y, radius/4, radius/3);
+  maze_context.rect(x-radius/4, y, radius/4, radius/3);
+  maze_context.strokeStyle = "#000";
+  maze_context.stroke();
+  maze_context.fillRect(x, y, radius/4, radius/3);
+  maze_context.rect(x, y, radius/4, radius/3);
+  maze_context.strokeStyle = "#000";
+  maze_context.stroke();
+}
+
+function move(direction) {
+  if (cur_pos[0] == 1 && cur_pos[1] == 5) return; // reached the goal
+
+  var new_pos = cur_pos.slice();
+  if (direction == 'l')
+    new_pos[1]--;
+  else if (direction == 'u')
+    new_pos[0]--;
+  else if (direction == 'r')
+    new_pos[1]++;
+  else if (direction == 'd')
+    new_pos[0]++;
+  if (maze_map[new_pos[0]][new_pos[1]] != 0) { // not wall
+    cur_pos = new_pos.slice();
+    move_count++;
+    $move_value.innerHTML = move_count;
+    reset_and_draw();
+    if (new_pos[0] == 1 && new_pos[1] == 5) { // reach goal
+      draw_smile_face();
+      $message.innerHTML = "You have reached the goal!";
+    }
+  }
+}
+
+function keyboard_event_listener(event) {
+  if (event.keyCode == 37) {
+    move('l');
+  }
+  else if(event.keyCode == 38) {
+    move('u');
+  }
+  else if(event.keyCode == 39) {
+    move('r');
+  }
+  else if(event.keyCode == 40) {
+    move('d');
+  }
+}
+
+document.addEventListener('keydown', keyboard_event_listener);
+</script>
+</body>
+
+</html> 
