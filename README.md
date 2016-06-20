@@ -6,3 +6,6 @@ You can go to [this website](http://fanglinhe.wix.com/fanglinhe#!javascript/nwib
 
 ## Current status:
 So far, the maze's map is fixed.  I would like to implement several algorithms mentioned on [Wiki page](https://en.wikipedia.org/wiki/Maze_generation_algorithm).
+
+## Screenshot:
+![alt tag](screenshot.png)
