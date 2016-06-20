@@ -40,6 +40,7 @@ function draw_smile_face(x, y, grid_width, grid_height) {
   var cent_x = x*grid_width + grid_width/2;
   var cent_y = y*grid_height + grid_height/2;
   var radius = Math.min(grid_width, grid_height)/3;
+  maze_context.lineWidth = radius/20;
 
   // face
   maze_context.beginPath();
@@ -50,14 +51,14 @@ function draw_smile_face(x, y, grid_width, grid_height) {
 
   // left eye
   maze_context.beginPath();
-  maze_context.arc(cent_x-radius/2, cent_y-radius/3, 2, 0, Math.PI*2, false);
+  maze_context.arc(cent_x-radius/2, cent_y-radius/3, radius/10, 0, Math.PI*2, false);
   maze_context.closePath();
   maze_context.fillStyle = "#000";
   maze_context.fill();
 
   // right eye
   maze_context.beginPath();
-  maze_context.arc(cent_x+radius/2, cent_y-radius/3, 2, 0, Math.PI*2, false);
+  maze_context.arc(cent_x+radius/2, cent_y-radius/3, radius/10, 0, Math.PI*2, false);
   maze_context.closePath();
   maze_context.fillStyle = "#000";
   maze_context.fill();
