@@ -56,7 +56,8 @@ function reset_and_draw() {
 function restart_game() {
   move_count = 0;
   $move_value.innerHTML = move_count;
-  cur_pos = [5, 1]; // [row, col]
+  cur_pos = [maze_map.length-2, 1]; // [row, col]
+  maze_map = dfs(25,25);
   maze_canvas.width = maze_canvas.width;
   reset_and_draw();
   $message.innerHTML = "";
