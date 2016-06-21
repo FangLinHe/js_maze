@@ -1,17 +1,17 @@
-function draw_maze(maze_map, grid_width, grid_height) {
+function draw_maze(maze_map, grid_num_cols, grid_num_rows, grid_width, grid_height) {
   // draw walls
   maze_context.fillStyle = "#000";
-  for (r = 0; r < num_grid_y; r++) {
-    for (c = 0; c < num_grid_x; c++) {
+  for (var r = 0; r < grid_num_rows; r++) {
+    for (var c = 0; c < grid_num_cols; c++) {
       if (maze_map[r][c] == 0) {
         maze_context.fillRect(c*grid_width-0.5, r*grid_height-0.5, grid_width+1, grid_height+1);
       }
     }
   }
 }
-function draw_cur_pos(x, y, grid_width, grid_height) {
-  var cent_x = x*grid_width + grid_width/2;
-  var cent_y = y*grid_height + grid_height/2;
+function draw_cur_pos(r, c, grid_width, grid_height) {
+  var cent_x = c*grid_width + grid_width/2;
+  var cent_y = r*grid_height + grid_height/2;
   var radius = Math.min(grid_width, grid_height)/3;
   maze_context.beginPath();
   maze_context.arc(cent_x, cent_y, radius, 0, Math.PI*2, false);
@@ -19,26 +19,26 @@ function draw_cur_pos(x, y, grid_width, grid_height) {
   maze_context.fillStyle = "#00f";
   maze_context.fill();
 }
-function draw_goal(x, y, grid_width, grid_height) {
+function draw_goal(r, c, grid_width, grid_height) {
   // draw flag
   maze_context.beginPath();
-  maze_context.moveTo(x*grid_width+grid_width/3, y*grid_height+grid_height/4);
-  maze_context.lineTo(x*grid_width+grid_width*2/3, y*grid_height+grid_height/2);
-  maze_context.lineTo(x*grid_width+grid_width/3, y*grid_height+grid_height/2);
-  maze_context.lineTo(x*grid_width+grid_width/3, y*grid_height+grid_height/4);
+  maze_context.moveTo(c*grid_width+grid_width/3, r*grid_height+grid_height/4);
+  maze_context.lineTo(c*grid_width+grid_width*2/3, r*grid_height+grid_height/2);
+  maze_context.lineTo(c*grid_width+grid_width/3, r*grid_height+grid_height/2);
+  maze_context.lineTo(c*grid_width+grid_width/3, r*grid_height+grid_height/4);
   maze_context.fillStyle = "red";
   maze_context.fill();
   // draw pole
   maze_context.beginPath();
-  maze_context.moveTo(x*grid_width+grid_width/3-1, y*grid_height+grid_height/4);
-  maze_context.lineTo(x*grid_width+grid_width/3-1, y*grid_height+grid_height*3/4);
+  maze_context.moveTo(c*grid_width+grid_width/3-1, r*grid_height+grid_height/4);
+  maze_context.lineTo(c*grid_width+grid_width/3-1, r*grid_height+grid_height*3/4);
   maze_context.strokeStyle = "#000";
   maze_context.lineWidth = 2;
   maze_context.stroke();
 }
-function draw_smile_face(x, y, grid_width, grid_height) {
-  var cent_x = x*grid_width + grid_width/2;
-  var cent_y = y*grid_height + grid_height/2;
+function draw_smile_face(r, c, grid_width, grid_height) {
+  var cent_x = c*grid_width + grid_width/2;
+  var cent_y = r*grid_height + grid_height/2;
   var radius = Math.min(grid_width, grid_height)/3;
   maze_context.lineWidth = radius/20;
 
