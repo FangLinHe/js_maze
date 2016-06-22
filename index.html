@@ -20,7 +20,7 @@
 <div class="message"><span class='value'></span></div>
 </p>
 <hr>
-<form action="" method="get">
+<form id="maze_gen" action="" method="get">
   Maze height (px):
   <input type="number" id="input_draw_maze_height" name="draw_maze_height" value="400"><br>
   Maze width (px):
@@ -29,6 +29,9 @@
   <input type="number" id="input_path_num_rows" name="path_num_rows" value="10"><br>
   Number of path columns:
   <input type="number" id="input_path_num_cols" name="path_num_cols" value="10"><br><br>
+  Maze generation algorithm:<br>
+  <label><input type="radio" name="algorithm" value="dfs" checked>Depth first search<br>
+  <label><input type="radio" name="algorithm" value="kruskal">Randomized Kruskal's algorithm<br>
   <input type="button" name="button" value="Reset maze" onClick="reset_maze(this.form)">
 </form>
 
@@ -46,7 +49,9 @@ var maze_context = maze_canvas.getContext("2d");
                 [0, 1, 0, 1, 0, 0, 0],
                 [0, 1, 0, 1, 1, 1, 0],
                 [0, 0, 0, 0, 0, 0, 0]];*/
-var maze_map = kruskal(path_num_rows, path_num_cols);
+var maze_map = (document.getElementById("maze_gen").algorithm[0].checked) ?
+               dfs(path_num_rows, path_num_cols) :
+               kruskal(path_num_rows, path_num_cols);
 var grid_num_rows = maze_map.length;
 var grid_num_cols = maze_map[0].length;
 var grid_width = draw_maze_width/grid_num_cols;
@@ -68,7 +73,9 @@ function reset_and_draw() {
 function restart_game() {
   move_count = 0;
   $move_value.innerHTML = move_count;
-  maze_map = kruskal(path_num_rows, path_num_cols);
+  maze_map = (document.getElementById("maze_gen").algorithm[0].checked) ?
+             dfs(path_num_rows, path_num_cols) :
+             kruskal(path_num_rows, path_num_cols);
   cur_pos = [maze_map.length-2, 1]; // [row, col]
   goal_pos = [1, maze_map[0].length-2];
   grid_num_rows = maze_map.length;
