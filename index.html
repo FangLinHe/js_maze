@@ -78,10 +78,16 @@ function move(direction) {
   else if (direction == 'd')
     new_pos[0]++;
   if (maze_map[new_pos[0]][new_pos[1]] != 0) { // not wall
+    // clean the previous position by covering a white rectangle
+    maze_context.fillStyle = "#fff";
+    maze_context.fillRect(cur_pos[1]*grid_width+0.5, cur_pos[0]*grid_height+0.5, grid_width-1, grid_height-1);
+    // update current position; count and show the movement
     cur_pos = new_pos.slice();
     move_count++;
     $move_value.innerHTML = move_count;
-    reset_and_draw();
+    // draw the new position
+    draw_cur_pos(cur_pos[0], cur_pos[1], grid_width, grid_height);
+    // determine if reached the goal
     if (new_pos[0] == goal_pos[0] && new_pos[1] == goal_pos[1]) { // reach goal
       draw_smile_face(new_pos[0], new_pos[1], grid_width, grid_height);
       $message.innerHTML = "You have reached the goal!";
